@@ -36,10 +36,26 @@ jobs:
 
     - name: 'Terraform Plan'
       run: |
-        ls -la
-        terraform plan -var-file="terraform.tfvars" -input=false
+        terraform plan \
+          -var="project_id=landing-dev-zafa" \
+          -var="host_project_id=landing-host-zafa" \
+          -var="region=europe-west1" \
+          -var="vpc_self_link=https://www.googleapis.com/compute/v1/projects/landing-host-zafa/global/networks/vpc-kubernetes" \
+          -var="subnet_standard_self_link=https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-standard" \
+          -var="subnet_autopilot_self_link=https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-autopilot" \
+          -var="sa_id=sa-gke-nodes" \
+          -input=false
 
     - name: 'Terraform Apply'
-      run: terraform apply -var-file="terraform.tfvars" -auto-approve -input=false
+      run: |
+        terraform apply -auto-approve \
+          -var="project_id=landing-dev-zafa" \
+          -var="host_project_id=landing-host-zafa" \
+          -var="region=europe-west1" \
+          -var="vpc_self_link=https://www.googleapis.com/compute/v1/projects/landing-host-zafa/global/networks/vpc-kubernetes" \
+          -var="subnet_standard_self_link=https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-standard" \
+          -var="subnet_autopilot_self_link=https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-autopilot" \
+          -var="sa_id=sa-gke-nodes" \
+          -input=false
 
       
