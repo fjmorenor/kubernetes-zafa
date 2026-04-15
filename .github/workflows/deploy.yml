@@ -14,17 +14,6 @@ jobs:
     name: 'Terraform Plan & Apply'
     runs-on: ubuntu-latest
     
-    # AQUÍ ESTÁ EL TRUCO: Terraform mapea TF_VAR_nombre a variable "nombre"
-    env:
-      TF_VAR_project_id: "landing-dev-zafa"
-      TF_VAR_region: "europe-west1"
-      TF_VAR_host_project_id: "landing-host-zafa"
-      TF_VAR_vpc_name: "vpc-kubernetes"
-      TF_VAR_sa_id: "sa-gke-nodes"
-      TF_VAR_vpc_self_link: "https://www.googleapis.com/compute/v1/projects/landing-host-zafa/global/networks/vpc-kubernetes"
-      TF_VAR_subnet_standard_self_link: "https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-standard"
-      TF_VAR_subnet_autopilot_self_link: "https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-autopilot"
-
     defaults:
       run:
         working-directory: ./environments/dev
@@ -42,13 +31,38 @@ jobs:
       - name: 'Setup Terraform'
         uses: hashicorp/setup-terraform@v3
 
+      - name: 'Debug Environment Variables'
+        # Esto nos dirá qué ve realmente el shell antes de ejecutar Terraform
+        run: |
+          echo "Verificando variables TF_VAR..."
+          printenv | grep TF_VAR || echo "No se encontraron variables TF_VAR"
+        env:
+          TF_VAR_vpc_name: "vpc-kubernetes"
+
       - name: 'Terraform Init'
         run: terraform init
 
       - name: 'Terraform Plan'
-        # Comando limpio gracias a las variables de entorno (env)
         run: terraform plan -input=false -lock=false
+        env:
+          TF_VAR_project_id: "landing-dev-zafa"
+          TF_VAR_region: "europe-west1"
+          TF_VAR_host_project_id: "landing-host-zafa"
+          TF_VAR_vpc_name: "vpc-kubernetes"
+          TF_VAR_sa_id: "sa-gke-nodes"
+          TF_VAR_vpc_self_link: "https://www.googleapis.com/compute/v1/projects/landing-host-zafa/global/networks/vpc-kubernetes"
+          TF_VAR_subnet_standard_self_link: "https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-standard"
+          TF_VAR_subnet_autopilot_self_link: "https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-autopilot"
 
       - name: 'Terraform Apply'
         if: github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve -input=false -lock=false
+        env:
+          TF_VAR_project_id: "landing-dev-zafa"
+          TF_VAR_region: "europe-west1"
+          TF_VAR_host_project_id: "landing-host-zafa"
+          TF_VAR_vpc_name: "vpc-kubernetes"
+          TF_VAR_sa_id: "sa-gke-nodes"
+          TF_VAR_vpc_self_link: "https://www.googleapis.com/compute/v1/projects/landing-host-zafa/global/networks/vpc-kubernetes"
+          TF_VAR_subnet_standard_self_link: "https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-standard"
+          TF_VAR_subnet_autopilot_self_link: "https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-autopilot"
