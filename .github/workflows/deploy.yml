@@ -35,7 +35,9 @@ jobs:
       run: terraform init
 
     - name: 'Terraform Plan'
-      run: terraform plan -var-file="terraform.tfvars" -input=false
+      run: |
+        ls -la
+        terraform plan -var-file="terraform.tfvars" -input=false
 
     - name: 'Terraform Apply'
       run: terraform apply -var-file="terraform.tfvars" -auto-approve -input=false
