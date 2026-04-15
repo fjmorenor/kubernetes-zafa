@@ -14,6 +14,7 @@ jobs:
     name: 'Terraform Plan & Apply'
     runs-on: ubuntu-latest
     
+    # AQUÍ ESTÁ EL TRUCO: Terraform mapea TF_VAR_nombre a variable "nombre"
     env:
       TF_VAR_project_id: "landing-dev-zafa"
       TF_VAR_region: "europe-west1"
@@ -45,6 +46,7 @@ jobs:
         run: terraform init
 
       - name: 'Terraform Plan'
+        # Comando limpio gracias a las variables de entorno (env)
         run: terraform plan -input=false -lock=false
 
       - name: 'Terraform Apply'
