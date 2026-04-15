@@ -40,6 +40,7 @@ jobs:
           -var="project_id=landing-dev-zafa" \
           -var="host_project_id=landing-host-zafa" \
           -var="region=europe-west1" \
+          -var="vpc_name=vpc-kubernetes" \
           -var="vpc_self_link=https://www.googleapis.com/compute/v1/projects/landing-host-zafa/global/networks/vpc-kubernetes" \
           -var="subnet_standard_self_link=https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-standard" \
           -var="subnet_autopilot_self_link=https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-autopilot" \
@@ -51,6 +52,7 @@ jobs:
         terraform apply -auto-approve \
           -var="project_id=landing-dev-zafa" \
           -var="host_project_id=landing-host-zafa" \
+          -var="vpc_name=vpc-kubernetes" \
           -var="region=europe-west1" \
           -var="vpc_self_link=https://www.googleapis.com/compute/v1/projects/landing-host-zafa/global/networks/vpc-kubernetes" \
           -var="subnet_standard_self_link=https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-standard" \
