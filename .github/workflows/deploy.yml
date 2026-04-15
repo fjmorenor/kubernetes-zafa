@@ -18,46 +18,44 @@ jobs:
         working-directory: ./environments/dev
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - id: 'auth'
-      name: 'Authenticate to Google Cloud'
-      uses: 'google-github-actions/auth@v2'
-      with:
-        workload_identity_provider: 'projects/932038588586/locations/global/workloadIdentityPools/github-pool-zafa/providers/github-provider'
-        service_account: 'github-actions-deployer@landing-dev-zafa.iam.gserviceaccount.com'
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          workload_identity_provider: 'projects/932038588586/locations/global/workloadIdentityPools/github-pool-zafa/providers/github-provider'
+          service_account: 'github-actions-deployer@landing-dev-zafa.iam.gserviceaccount.com'
 
-    - name: 'Set up Terraform'
-      uses: hashicorp/setup-terraform@v3
+      - name: 'Set up Terraform'
+        uses: hashicorp/setup-terraform@v3
 
-    - name: 'Terraform Init'
-      run: terraform init
+      - name: 'Terraform Init'
+        run: terraform init
 
-    - name: 'Terraform Plan'
-      run: |
-        terraform plan \
-          -var="project_id=landing-dev-zafa" \
-          -var="host_project_id=landing-host-zafa" \
-          -var="region=europe-west1" \
-          -var="vpc_name=vpc-kubernetes" \
-          -var="vpc_self_link=https://www.googleapis.com/compute/v1/projects/landing-host-zafa/global/networks/vpc-kubernetes" \
-          -var="subnet_standard_self_link=https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-standard" \
-          -var="subnet_autopilot_self_link=https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-autopilot" \
-          -var="sa_id=sa-gke-nodes" \
-          -input=false
+      - name: 'Terraform Plan'
+        run: |
+          terraform plan \
+            -var="project_id=landing-dev-zafa" \
+            -var="region=europe-west1" \
+            -var="host_project_id=landing-host-zafa" \
+            -var="vpc_name=vpc-kubernetes" \
+            -var="sa_id=sa-gke-nodes" \
+            -var="vpc_self_link=https://www.googleapis.com/compute/v1/projects/landing-host-zafa/global/networks/vpc-kubernetes" \
+            -var="subnet_standard_self_link=https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-standard" \
+            -var="subnet_autopilot_self_link=https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-autopilot" \
+            -input=false
 
-    - name: 'Terraform Apply'
-      run: |
-        terraform apply -auto-approve \
-          -var="project_id=landing-dev-zafa" \
-          -var="host_project_id=landing-host-zafa" \
-          -var="vpc_name=vpc-kubernetes" \
-          -var="region=europe-west1" \
-          -var="vpc_self_link=https://www.googleapis.com/compute/v1/projects/landing-host-zafa/global/networks/vpc-kubernetes" \
-          -var="subnet_standard_self_link=https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-standard" \
-          -var="subnet_autopilot_self_link=https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-autopilot" \
-          -var="sa_id=sa-gke-nodes" \
-          -input=false
-
-      
+      - name: 'Terraform Apply'
+        run: |
+          terraform apply -auto-approve \
+            -var="project_id=landing-dev-zafa" \
+            -var="region=europe-west1" \
+            -var="host_project_id=landing-host-zafa" \
+            -var="vpc_name=vpc-kubernetes" \
+            -var="sa_id=sa-gke-nodes" \
+            -var="vpc_self_link=https://www.googleapis.com/compute/v1/projects/landing-host-zafa/global/networks/vpc-kubernetes" \
+            -var="subnet_standard_self_link=https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-standard" \
+            -var="subnet_autopilot_self_link=https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-autopilot" \
+            -input=false
