@@ -2,7 +2,8 @@ name: 'Terraform GKE Deploy'
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
 
 permissions:
   contents: 'read'
@@ -10,29 +11,32 @@ permissions:
 
 jobs:
   terraform:
-    name: 'Terraform'
+    name: 'Terraform Plan & Apply'
     runs-on: ubuntu-latest
+    
+    # Define el directorio de trabajo para todos los pasos de este job
     defaults:
       run:
         working-directory: ./environments/dev
+
     steps:
-      - name: Checkout
+      - name: 'Checkout Code'
         uses: actions/checkout@v4
 
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
+      - name: 'Google Auth'
         uses: 'google-github-actions/auth@v2'
         with:
           workload_identity_provider: 'projects/932038588586/locations/global/workloadIdentityPools/github-pool-zafa/providers/github-provider'
           service_account: 'github-actions-deployer@landing-dev-zafa.iam.gserviceaccount.com'
 
-      - name: 'Set up Terraform'
+      - name: 'Setup Terraform'
         uses: hashicorp/setup-terraform@v3
 
       - name: 'Terraform Init'
         run: terraform init
 
       - name: 'Terraform Plan'
+        id: plan
         run: |
           terraform plan \
             -var="project_id=landing-dev-zafa" \
@@ -46,8 +50,10 @@ jobs:
             -input=false
 
       - name: 'Terraform Apply'
+        # Solo se ejecuta si el push es en la rama main
+        if: github.ref == 'refs/heads/main'
         run: |
-          terraform apply -auto-approve \
+          terraform apply \
             -var="project_id=landing-dev-zafa" \
             -var="region=europe-west1" \
             -var="host_project_id=landing-host-zafa" \
@@ -56,4 +62,5 @@ jobs:
             -var="vpc_self_link=https://www.googleapis.com/compute/v1/projects/landing-host-zafa/global/networks/vpc-kubernetes" \
             -var="subnet_standard_self_link=https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-standard" \
             -var="subnet_autopilot_self_link=https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-autopilot" \
+            -auto-approve \
             -input=false
