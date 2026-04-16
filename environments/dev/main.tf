@@ -33,7 +33,7 @@ module "sa_gke_nodes" {
 #################################################################################
 # Autopilot gestiona los nodos por ti, pero sigue necesitando una identidad
 # para las tareas de telemetría y logging.
-module "sa_gke_autopilot" {
+/*module "sa_gke_autopilot" {
   source          = "../../modules/iam"
   project_id      = var.project_id
   sa_id           = "sa-gke-autopilot"
@@ -47,6 +47,7 @@ module "sa_gke_autopilot" {
 
   depends_on = [ module.apis ]
 }
+*/
 
 #################################################################################
 # 4. GKE STANDARD: El "Cluster Manual"
@@ -85,7 +86,7 @@ module "gke_standard" {
 # 5. GKE AUTOPILOT: El "Cluster Manos Libres"
 #################################################################################
 # Google gestiona la infraestructura. Tú solo despliegas apps y pagas por uso.
-module "gke_autopilot" {
+/*module "gke_autopilot" {
   source          = "../../modules/gke-autopilot"
   project_id      = var.project_id
   region          = var.region
@@ -103,3 +104,4 @@ module "gke_autopilot" {
   
   depends_on = [ module.sa_gke_autopilot ]
 }
+*/
