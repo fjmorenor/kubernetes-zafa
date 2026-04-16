@@ -69,7 +69,7 @@ resource "google_container_node_pool" "nodes" {
   node_config {
     machine_type    = var.machine_type # Tamaño de la CPU y RAM (ej: e2-medium).
     service_account = var.node_sa_email # La identidad (SA) que creaste en el módulo IAM.
-    disk_size_gb = 10
+    disk_size_gb = 20
     disk_type = "pd-standard"
     
     # Permiso para que los nodos puedan usar los servicios de Google Cloud
