@@ -1,5 +1,5 @@
 output "cluster_name" {
-  value = google_container_cluster.standard.name
+  value = google_container_cluster.standard.endpoint
 }
 /*
 output "cluster_endpoint" {
