@@ -51,3 +51,6 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
+
+      env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
