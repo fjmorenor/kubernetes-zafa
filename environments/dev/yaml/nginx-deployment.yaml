@@ -53,4 +53,11 @@ spec:
       targetPort: 80
 
       env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  jobs:
+  terraform:
+    name: 'Terraform Plan & Apply'
+    runs-on: ubuntu-latest
+    env:
+      # Esta línea silencia el aviso y usa la versión moderna de Node
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      # ... tus otras variables TF_VAR_ ...
