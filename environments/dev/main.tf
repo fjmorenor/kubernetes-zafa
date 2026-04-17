@@ -105,3 +105,13 @@ module "gke_standard" {
   depends_on = [ module.sa_gke_autopilot ]
 }
 */
+
+module "cloud-sql" {
+  source = "../../modules/clud-sql"
+  instance_name = var.instance_name
+  region = var.region
+  db_name = var.db_name
+  user_name = var.user_name
+  user_password = var.user_password
+  }
+

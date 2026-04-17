@@ -14,3 +14,4 @@ resource "google_project_iam_member" "asignar_roles" {
     member = "serviceAccount:${google_service_account.static_sa.email}"
     
 }
+

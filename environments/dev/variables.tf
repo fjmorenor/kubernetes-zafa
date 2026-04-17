@@ -34,3 +34,20 @@ variable "vpc_name" {
 variable "sa_id" {
     type = string
 }
+
+variable "user_password" {
+    type = string
+    sensitive = true
+}
+
+variable "db_name" {
+    type = string
+}
+
+variable "user_name" {
+    type = string
+}
+
+variable "instance_name" {
+    type = string
+}
