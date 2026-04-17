@@ -30,7 +30,8 @@ locals {
     "artifactregistry.googleapis.com",  # Para guardar tus imágenes de Docker
     "autoscaling.googleapis.com",       # Para que el cluster crezca solo
     "secretmanager.googleapis.com",     # Para guardar contraseñas seguras
-    "cloudtrace.googleapis.com",        # Para ver el rendimiento de tus apps
+    "cloudtrace.googleapis.com", 
+    "sqladmin.googleapis.com"       # Para ver el rendimiento de tus apps
   ]
 
   # 4. CONSTRUCCIÓN DE LA LISTA FINAL:
