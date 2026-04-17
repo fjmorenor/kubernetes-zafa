@@ -66,3 +66,14 @@ jobs:
           TF_VAR_vpc_self_link: "https://www.googleapis.com/compute/v1/projects/landing-host-zafa/global/networks/vpc-kubernetes"
           TF_VAR_subnet_standard_self_link: "https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-standard"
           TF_VAR_subnet_autopilot_self_link: "https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-autopilot"
+
+      - name: Terraform Plan
+        run: terraform plan -input=false -lock=false
+        working-directory: ./environments/dev
+        env:
+          # Esto le dice a Terraform que la variable "user_password" es el Secret de GitHub
+          TF_VAR_user_password: ${{ secrets.DB_PASSWORD }}
+          # Si no quieres crear el archivo .tfvars, también podrías pasarlas aquí:
+          TF_VAR_instance_name: "db-instancia-dev"
+          TF_VAR_db_name: "mibasedatos"
+          TF_VAR_user_name: "admin"
