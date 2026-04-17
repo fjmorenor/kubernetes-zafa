@@ -18,6 +18,21 @@ jobs:
       run:
         working-directory: ./environments/dev
 
+    # 1. DEFINIMOS TODAS LAS VARIABLES AQUÍ (Se aplican a todos los pasos)
+    env:
+      TF_VAR_project_id: "landing-dev-zafa"
+      TF_VAR_region: "europe-west1"
+      TF_VAR_host_project_id: "landing-host-zafa"
+      TF_VAR_vpc_name: "vpc-kubernetes"
+      TF_VAR_sa_id: "sa-gke-nodes"
+      TF_VAR_instance_name: "db-instancia-dev"
+      TF_VAR_db_name: "mibasedatos"
+      TF_VAR_user_name: "admin"
+      TF_VAR_user_password: ${{ secrets.DB_PASSWORD }}
+      TF_VAR_vpc_self_link: "https://www.googleapis.com/compute/v1/projects/landing-host-zafa/global/networks/vpc-kubernetes"
+      TF_VAR_subnet_standard_self_link: "https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-standard"
+      TF_VAR_subnet_autopilot_self_link: "https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-autopilot"
+
     steps:
       - name: 'Checkout Code'
         uses: actions/checkout@v4
@@ -31,49 +46,12 @@ jobs:
       - name: 'Setup Terraform'
         uses: hashicorp/setup-terraform@v3
 
-      - name: 'Debug Environment Variables'
-        # Esto nos dirá qué ve realmente el shell antes de ejecutar Terraform
-        run: |
-          echo "Verificando variables TF_VAR..."
-          printenv | grep TF_VAR || echo "No se encontraron variables TF_VAR"
-        env:
-          TF_VAR_vpc_name: "vpc-kubernetes"
-
       - name: 'Terraform Init'
         run: terraform init
 
       - name: 'Terraform Plan'
         run: terraform plan -input=false -lock=false
-        env:
-          TF_VAR_project_id: "landing-dev-zafa"
-          TF_VAR_region: "europe-west1"
-          TF_VAR_host_project_id: "landing-host-zafa"
-          TF_VAR_vpc_name: "vpc-kubernetes"
-          TF_VAR_sa_id: "sa-gke-nodes"
-          TF_VAR_vpc_self_link: "https://www.googleapis.com/compute/v1/projects/landing-host-zafa/global/networks/vpc-kubernetes"
-          TF_VAR_subnet_standard_self_link: "https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-standard"
-          TF_VAR_subnet_autopilot_self_link: "https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-autopilot"
 
       - name: 'Terraform Apply'
         if: github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve -input=false -lock=false
-        env:
-          TF_VAR_project_id: "landing-dev-zafa"
-          TF_VAR_region: "europe-west1"
-          TF_VAR_host_project_id: "landing-host-zafa"
-          TF_VAR_vpc_name: "vpc-kubernetes"
-          TF_VAR_sa_id: "sa-gke-nodes"
-          TF_VAR_vpc_self_link: "https://www.googleapis.com/compute/v1/projects/landing-host-zafa/global/networks/vpc-kubernetes"
-          TF_VAR_subnet_standard_self_link: "https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-standard"
-          TF_VAR_subnet_autopilot_self_link: "https://www.googleapis.com/compute/v1/projects/landing-host-zafa/regions/europe-west1/subnetworks/subnet-gke-autopilot"
-
-      - name: Terraform Plan
-        run: terraform plan -input=false -lock=false
-        working-directory: ./environments/dev
-        env:
-          # Esto le dice a Terraform que la variable "user_password" es el Secret de GitHub
-          TF_VAR_user_password: ${{ secrets.DB_PASSWORD }}
-          # Si no quieres crear el archivo .tfvars, también podrías pasarlas aquí:
-          TF_VAR_instance_name: "db-instancia-dev"
-          TF_VAR_db_name: "mibasedatos"
-          TF_VAR_user_name: "admin"
