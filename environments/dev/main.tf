@@ -113,5 +113,7 @@ module "cloud-sql" {
   db_name = var.db_name
   user_name = var.user_name
   user_password = var.user_password
+
+  depends_on = [ module.apis ]
   }
 
