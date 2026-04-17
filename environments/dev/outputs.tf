@@ -7,3 +7,8 @@ output "gke_autopilot_endpoint" {
   value = module.gke_autopilot.cluster_endpoint
 }
 */
+
+output "db_connection_string" {
+  value = module.cloud-sql.db_connection_string
+  
+}

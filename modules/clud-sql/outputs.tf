@@ -1,5 +1,5 @@
 output "db_connection_string" {
-  value = module.mi_base_de_datos.intance_connection_name
+  value = google_sql_database_instance.instance.connection_name
 }
 
 output "public_ip" {
